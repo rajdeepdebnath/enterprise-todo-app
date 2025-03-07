@@ -1,43 +1,66 @@
 .game-board {
   display: grid;
-  width: 400px;
-  height: 400px;
-  border: 2px solid #444;
-  background-color: #222;
+  gap: 1px;
+  width: min(90vw, 400px);
+  height: min(90vw, 400px);
+  max-width: 90vh;
+  max-height: 90vh;
+  aspect-ratio: 1/1;
+  border: 3px solid #2c3e50;
+  border-radius: 5px;
+  background-color: #0a1622;
   position: relative;
+  box-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
 }
 
 .cell {
-  border: 1px solid #333;
+  border-radius: 2px;
+  transition: background-color 0.1s;
+}
+
+.empty {
+  background-color: #1e2a38;
 }
 
 .snake-head {
-  background-color: #4caf50;
+  background: radial-gradient(circle at 30% 30%, #4CAF50, #2E7D32);
   border-radius: 4px;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
 }
 
 .snake-body {
-  background-color: #8bc34a;
+  background: linear-gradient(to bottom right, #81C784, #4CAF50);
   border-radius: 3px;
 }
 
 .food {
-  background-color: #f44336;
+  background: radial-gradient(circle at 30% 30%, #FF5252, #D32F2F);
   border-radius: 50%;
-  box-shadow: 0 0 5px rgba(244, 67, 54, 0.7);
+  box-shadow: 0 0 8px rgba(255, 82, 82, 0.7);
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    box-shadow: 0 0 5px rgba(255, 82, 82, 0.7);
+  }
+  to {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 82, 82, 0.9);
+  }
 }
 
 @media (max-width: 600px) {
   .game-board {
-    width: 300px;
-    height: 300px;
+    width: min(90vw, 300px);
+    height: min(90vw, 300px);
   }
 }
 
 @media (max-width: 400px) {
   .game-board {
-    width: 250px;
-    height: 250px;
+    width: min(90vw, 250px);
+    height: min(90vw, 250px);
   }
 }

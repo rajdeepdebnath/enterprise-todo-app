@@ -1,8 +1,11 @@
 .game-controls {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 15px;
-  margin-top: 10px;
+  margin-top: 5px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .button-controls {
@@ -14,16 +17,25 @@
 .button-controls button {
   padding: 8px 16px;
   font-size: 1rem;
-  background-color: #2196f3;
-  color: white;
+  font-weight: bold;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #3498db, #2980b9);
+  color: white;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .button-controls button:hover {
-  background-color: #1976d2;
+  background: linear-gradient(to bottom, #2980b9, #2471a3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.button-controls button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .direction-controls {
@@ -31,7 +43,7 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .horizontal-controls {
@@ -46,25 +58,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #424242;
-  color: white;
   border: none;
-  border-radius: 50%;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #34495e, #2c3e50);
+  color: white;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .direction-btn:hover {
-  background-color: #616161;
+  background: linear-gradient(to bottom, #2c3e50, #1a252f);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .direction-btn:active {
-  background-color: #757575;
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* Hide direction controls on desktop since keyboard is preferred */
 @media (min-width: 1024px) {
   .direction-controls {
     display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .direction-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+  
+  .horizontal-controls {
+    gap: 20px;
   }
 }
