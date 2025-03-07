@@ -26,7 +26,7 @@
   margin-bottom: 10px;
 }
 
-.score, .level {
+.score, .level, .high-score {
   font-size: 1.5rem;
   font-weight: bold;
   color: #ecf0f1;
@@ -34,6 +34,23 @@
   background: rgba(0, 0, 0, 0.2);
   padding: 5px 15px;
   border-radius: 20px;
+}
+
+.high-score {
+  color: #FFD700;
+  margin-bottom: 10px;
+}
+
+.power-up-active {
+  color: #FFD700;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 15px;
+  border-radius: 5px;
+  animation: pulse 0.5s infinite alternate;
 }
 
 .game-over {

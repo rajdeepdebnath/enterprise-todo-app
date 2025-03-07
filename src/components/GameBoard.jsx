@@ -1,7 +1,7 @@
 import React from 'react';
 import './GameBoard.css';
 
-function GameBoard({ snake, food, boardSize }) {
+function GameBoard({ snake, food, powerUp, hasPowerUp, boardSize }) {
   // Create a 2D grid representation
   const renderBoard = () => {
     const cells = [];
@@ -26,6 +26,11 @@ function GameBoard({ snake, food, boardSize }) {
         // Check if cell is food
         if (food.x === x && food.y === y) {
           cellType = 'food';
+        }
+        
+        // Check if cell is power-up
+        if (powerUp && powerUp.x === x && powerUp.y === y) {
+          cellType = 'power-up';
         }
         
         cells.push(

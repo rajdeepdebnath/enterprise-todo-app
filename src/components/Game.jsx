@@ -9,6 +9,8 @@ const INITIAL_SPEED = 200; // Slower initial speed
 const SPEED_INCREMENT = 15;
 const MAX_SPEED = 50;
 const POINTS_PER_LEVEL = 5; // Points needed to level up
+const POWER_UP_CHANCE = 0.1; // 10% chance of power-up appearing when food is eaten
+const POWER_UP_DURATION = 5000; // 5 seconds
 
 // Direction constants
 const DIRECTIONS = {
@@ -28,9 +30,15 @@ const initialSnake = [
 function Game() {
   const [snake, setSnake] = useState(initialSnake);
   const [food, setFood] = useState({ x: 5, y: 5 });
+  const [powerUp, setPowerUp] = useState(null);
+  const [hasPowerUp, setHasPowerUp] = useState(false);
   const [direction, setDirection] = useState(DIRECTIONS.UP);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem('snakeHighScore');
+    return saved ? parseInt(saved, 10) : 0;
+  });
   const [level, setLevel] = useState(1);
   const [speed, setSpeed] = useState(INITIAL_SPEED);
   const [isPaused, setIsPaused] = useState(false);
@@ -40,6 +48,7 @@ function Game() {
   const snakeRef = useRef(snake);
   const gameOverRef = useRef(gameOver);
   const isPausedRef = useRef(isPaused);
+  const hasPowerUpRef = useRef(hasPowerUp);
 
   // Update refs when state changes
   useEffect(() => {
@@ -47,25 +56,42 @@ function Game() {
     snakeRef.current = snake;
     gameOverRef.current = gameOver;
     isPausedRef.current = isPaused;
-  }, [direction, snake, gameOver, isPaused]);
+    hasPowerUpRef.current = hasPowerUp;
+  }, [direction, snake, gameOver, isPaused, hasPowerUp]);
 
-  // Generate random food position
-  const generateFood = () => {
-    const newFood = {
+  // Generate random position (for food and power-ups)
+  const generateRandomPosition = () => {
+    const newPosition = {
       x: Math.floor(Math.random() * BOARD_SIZE),
       y: Math.floor(Math.random() * BOARD_SIZE)
     };
     
-    // Make sure food doesn't appear on snake
+    // Make sure it doesn't appear on snake
     const isOnSnake = snake.some(segment => 
-      segment.x === newFood.x && segment.y === newFood.y
+      segment.x === newPosition.x && segment.y === newPosition.y
     );
     
-    if (isOnSnake) {
-      return generateFood();
+    // Also make sure it doesn't overlap with other items
+    const isOnFood = food && food.x === newPosition.x && food.y === newPosition.y;
+    const isOnPowerUp = powerUp && powerUp.x === newPosition.x && powerUp.y === newPosition.y;
+    
+    if (isOnSnake || isOnFood || isOnPowerUp) {
+      return generateRandomPosition();
     }
     
-    return newFood;
+    return newPosition;
+  };
+  
+  // Generate food position
+  const generateFood = () => generateRandomPosition();
+  
+  // Generate power-up position
+  const generatePowerUp = () => {
+    // Only generate a power-up with a certain probability
+    if (Math.random() < POWER_UP_CHANCE) {
+      return generateRandomPosition();
+    }
+    return null;
   };
 
   // Handle keyboard input
@@ -153,9 +179,18 @@ function Game() {
       if (newHead.x === food.x && newHead.y === food.y) {
         setFood(generateFood());
         
+        // Maybe generate a power-up
+        setPowerUp(generatePowerUp());
+        
         // Update score and check for level up
         setScore(prevScore => {
           const newScore = prevScore + 1;
+          
+          // Update high score if needed
+          if (newScore > highScore) {
+            setHighScore(newScore);
+            localStorage.setItem('snakeHighScore', newScore.toString());
+          }
           
           // Level up logic
           if (newScore > 0 && newScore % POINTS_PER_LEVEL === 0) {
@@ -169,8 +204,30 @@ function Game() {
           
           return newScore;
         });
+      } else if (powerUp && newHead.x === powerUp.x && newHead.y === powerUp.y) {
+        // Snake ate a power-up
+        setPowerUp(null);
+        setHasPowerUp(true);
+        
+        // Set a timer to remove the power-up effect
+        setTimeout(() => {
+          setHasPowerUp(false);
+        }, POWER_UP_DURATION);
+        
+        // Add bonus points for power-up
+        setScore(prevScore => {
+          const newScore = prevScore + 3;
+          
+          // Update high score if needed
+          if (newScore > highScore) {
+            setHighScore(newScore);
+            localStorage.setItem('snakeHighScore', newScore.toString());
+          }
+          
+          return newScore;
+        });
       } else {
-        // Remove tail if no food was eaten
+        // Remove tail if no food or power-up was eaten
         newSnake.pop();
       }
       
@@ -188,6 +245,8 @@ function Game() {
   const resetGame = () => {
     setSnake(initialSnake);
     setFood(generateFood());
+    setPowerUp(null);
+    setHasPowerUp(false);
     setDirection(DIRECTIONS.UP);
     setGameOver(false);
     setScore(0);
@@ -223,13 +282,17 @@ function Game() {
           <div className="score">Score: {score}</div>
           <div className="level">Level: {level}</div>
         </div>
+        <div className="high-score">High Score: {highScore}</div>
+        {hasPowerUp && <div className="power-up-active">Power-Up Active!</div>}
         {gameOver && <div className="game-over">Game Over!</div>}
         {isPaused && !gameOver && <div className="paused">Paused</div>}
       </div>
       
       <GameBoard 
         snake={snake} 
-        food={food} 
+        food={food}
+        powerUp={powerUp}
+        hasPowerUp={hasPowerUp}
         boardSize={BOARD_SIZE} 
       />
       

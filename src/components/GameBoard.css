@@ -9,6 +9,10 @@
   border: 3px solid #2c3e50;
   border-radius: 5px;
   background-color: #0a1622;
+  background-image: 
+    linear-gradient(rgba(30, 60, 90, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 60, 90, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
   position: relative;
   box-shadow: 0 0 20px rgba(0, 100, 255, 0.2);
 }
@@ -38,6 +42,18 @@
   border-radius: 50%;
   box-shadow: 0 0 8px rgba(255, 82, 82, 0.7);
   animation: pulse 1s infinite alternate;
+}
+
+.power-up {
+  background: radial-gradient(circle at 30% 30%, #FFD700, #FFA000);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+  animation: spin 2s infinite linear, pulse 1s infinite alternate;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
