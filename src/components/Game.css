@@ -13,10 +13,16 @@
   margin-bottom: 10px;
 }
 
-.score {
+.score-level {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.score, .level {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .game-over {

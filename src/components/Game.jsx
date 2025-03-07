@@ -5,9 +5,10 @@ import './Game.css';
 
 // Constants
 const BOARD_SIZE = 20;
-const INITIAL_SPEED = 150;
-const SPEED_INCREMENT = 10;
+const INITIAL_SPEED = 200; // Slower initial speed
+const SPEED_INCREMENT = 15;
 const MAX_SPEED = 50;
+const POINTS_PER_LEVEL = 5; // Points needed to level up
 
 // Direction constants
 const DIRECTIONS = {
@@ -30,6 +31,7 @@ function Game() {
   const [direction, setDirection] = useState(DIRECTIONS.UP);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [level, setLevel] = useState(1);
   const [speed, setSpeed] = useState(INITIAL_SPEED);
   const [isPaused, setIsPaused] = useState(false);
   
@@ -150,12 +152,23 @@ function Game() {
       // Check if snake ate food
       if (newHead.x === food.x && newHead.y === food.y) {
         setFood(generateFood());
-        setScore(prevScore => prevScore + 1);
         
-        // Increase speed every 5 points, but not beyond max speed
-        if (score > 0 && score % 5 === 0 && speed > MAX_SPEED) {
-          setSpeed(prevSpeed => prevSpeed - SPEED_INCREMENT);
-        }
+        // Update score and check for level up
+        setScore(prevScore => {
+          const newScore = prevScore + 1;
+          
+          // Level up logic
+          if (newScore > 0 && newScore % POINTS_PER_LEVEL === 0) {
+            setLevel(prevLevel => prevLevel + 1);
+            
+            // Increase speed with each level, but not beyond max speed
+            if (speed > MAX_SPEED) {
+              setSpeed(prevSpeed => Math.max(prevSpeed - SPEED_INCREMENT, MAX_SPEED));
+            }
+          }
+          
+          return newScore;
+        });
       } else {
         // Remove tail if no food was eaten
         newSnake.pop();
@@ -178,6 +191,7 @@ function Game() {
     setDirection(DIRECTIONS.UP);
     setGameOver(false);
     setScore(0);
+    setLevel(1);
     setSpeed(INITIAL_SPEED);
     setIsPaused(false);
   };
@@ -205,7 +219,10 @@ function Game() {
   return (
     <div className="game-container">
       <div className="game-info">
-        <div className="score">Score: {score}</div>
+        <div className="score-level">
+          <div className="score">Score: {score}</div>
+          <div className="level">Level: {level}</div>
+        </div>
         {gameOver && <div className="game-over">Game Over!</div>}
         {isPaused && !gameOver && <div className="paused">Paused</div>}
       </div>
