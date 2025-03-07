@@ -1,0 +1,70 @@
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.button-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.button-controls button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button-controls button:hover {
+  background-color: #1976d2;
+}
+
+.direction-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.horizontal-controls {
+  display: flex;
+  gap: 40px;
+}
+
+.direction-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #424242;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.direction-btn:hover {
+  background-color: #616161;
+}
+
+.direction-btn:active {
+  background-color: #757575;
+}
+
+/* Hide direction controls on desktop since keyboard is preferred */
+@media (min-width: 1024px) {
+  .direction-controls {
+    display: none;
+  }
+}
